@@ -2,11 +2,13 @@
 
 **Date:** 2026-01-29
 **Status:** Complete
-**Recommendation:** Stay with @ts-rest
+**Recommendation:** Monitor both options, prepare for potential migration
 
 ## Executive Summary
 
-After thorough investigation, **I recommend staying with @ts-rest**. The primary concern motivating this evaluation—that @ts-rest has been inactive for 8 months—is **factually incorrect**. The repository shows active maintenance with v3.52.1 released in March 2025, regular commits through January 2025, and 194 total releases.
+The concern raised in issue #349 is **valid**. @ts-rest has been inactive for approximately **8 months** (last commit: June 2, 2025). However, oRPC currently lacks a dedicated Fastify adapter, which is a critical blocker for immediate migration.
+
+**Recommendation:** Stay with @ts-rest short-term while actively monitoring oRPC for Fastify support. Begin planning for potential migration if @ts-rest remains unmaintained.
 
 ---
 
@@ -54,17 +56,18 @@ After thorough investigation, **I recommend staying with @ts-rest**. The primary
 
 | Feature | @ts-rest | oRPC |
 |---------|----------|------|
-| **Fastify Adapter** | ✅ Dedicated `@ts-rest/fastify` | ⚠️ Generic Node.js HTTP only |
+| **Fastify Adapter** | ✅ Dedicated `@ts-rest/fastify` | ❌ No adapter (Node.js HTTP only) |
 | **Vue 3 Support** | ✅ Via `@ts-rest/core` | ⚠️ Via Pinia Colada (different pattern) |
 | **Zod Integration** | ✅ Native | ✅ Native + Valibot, ArkType |
 | **OpenAPI Generation** | ✅ Via metadata + @fastify/swagger | ✅ Built-in automatic |
-| **Maturity** | ✅ 194 releases since 2022 | ⚠️ v1.0 released Dec 2025 |
+| **Maturity** | ⚠️ 194 releases, but inactive 8 months | ✅ v1.0 Dec 2025, active development |
 | **Contract-First** | ✅ Excellent | ✅ Excellent |
-| **Binary Responses** | ✅ Working | ❓ Unknown |
-| **Active Maintenance** | ✅ v3.52.1 (March 2025) | ✅ Active |
+| **Binary Responses** | ✅ Working | ❓ Unknown/undocumented |
+| **Active Maintenance** | ❌ Last commit: June 2, 2025 | ✅ Active |
 
 ### oRPC Advantages
 
+- **Active development** (critical differentiator)
 - Automatic OpenAPI spec generation (no manual metadata)
 - Support for multiple validation libraries
 - Dual RPC/REST endpoint serving
@@ -74,9 +77,8 @@ After thorough investigation, **I recommend staying with @ts-rest**. The primary
 
 - **Dedicated Fastify adapter** (critical for this project)
 - Already fully integrated and tested
-- 105 open issues with community support
-- More mature ecosystem (3+ years)
-- No migration risk
+- No migration risk (short-term)
+- Known, working solution
 
 ---
 
@@ -92,77 +94,103 @@ After thorough investigation, **I recommend staying with @ts-rest**. The primary
 | Integration Tests | 10+ | ~2,000+ | HIGH |
 | Documentation | 5+ | ~500 | LOW |
 
-### Critical Blockers
+### Critical Blocker
 
-1. **No Fastify adapter**: oRPC doesn't mention Fastify support. Would require:
-   - Custom adapter implementation, OR
-   - Migration from Fastify to Express/generic HTTP
-
-2. **Vue client pattern change**: oRPC uses Pinia Colada, not direct client calls
-
-3. **Binary response handling**: No documented support for Buffer responses
+**oRPC lacks a Fastify adapter.** Migration options:
+1. Write a custom Fastify adapter for oRPC
+2. Migrate from Fastify to Express (major breaking change)
+3. Use generic Node.js HTTP handler with Fastify (potential compatibility issues)
 
 ### PoC Recommendation
 
-**Not recommended at this time.** The lack of Fastify adapter is a fundamental blocker. Creating a PoC would require either:
-- Writing a custom Fastify adapter for oRPC
-- Migrating from Fastify (major breaking change)
+A proof-of-concept **could be valuable** to:
+1. Test custom Fastify adapter feasibility
+2. Verify binary response handling works
+3. Measure actual migration effort
+
+**Suggested scope:** Migrate 2-3 simple endpoints (e.g., `listProjects`, `getProject`) to oRPC with a custom Fastify wrapper.
 
 ---
 
 ## 4. Risk Evaluation
 
-### Migration Risks
+### Staying with @ts-rest Risks
 
 | Risk | Severity | Likelihood | Impact |
 |------|----------|------------|--------|
-| No Fastify adapter | HIGH | CERTAIN | Would require custom adapter or framework change |
+| Security vulnerability without fix | HIGH | MEDIUM | No patches available |
+| Breaking changes in dependencies | MEDIUM | MEDIUM | Zod/Fastify updates may break |
+| Feature stagnation | LOW | HIGH | No new features |
+| Community abandonment | MEDIUM | MEDIUM | Less support available |
+
+### Migration to oRPC Risks
+
+| Risk | Severity | Likelihood | Impact |
+|------|----------|------------|--------|
+| No Fastify adapter | HIGH | CERTAIN | Requires custom solution |
 | Breaking test suite | MEDIUM | HIGH | 20+ integration tests need rewrite |
 | Binary response handling | MEDIUM | MEDIUM | May require workarounds |
 | Learning curve | LOW | CERTAIN | New patterns for team |
 | Bug introduction | MEDIUM | MEDIUM | New code = new bugs |
 
-### Opportunity Cost
+### Cost-Benefit Analysis
 
-- Estimated migration effort: **2-4 weeks**
-- Testing and stabilization: **1-2 weeks**
-- Documentation updates: **1 week**
-- **Total: 4-7 weeks of development time**
+**Migration Cost:**
+- Estimated effort: **4-7 weeks**
+- Risk: Medium-High (Fastify adapter uncertainty)
 
-### Benefit Analysis
-
-The primary benefits oRPC offers (automatic OpenAPI, multi-validator support) provide marginal improvement over current implementation:
-- OpenAPI already works via @fastify/swagger
-- Only Zod is needed (no multi-validator requirement)
+**Staying Cost:**
+- Short-term: Low (everything works)
+- Long-term: Medium-High (unmaintained dependency risk)
 
 ---
 
 ## 5. Strategic Decision
 
-### Recommendation: **Stay with @ts-rest**
+### Recommendation: **Prepare for Migration**
 
-### Rationale
+Given the 8-month inactivity of @ts-rest, the project should:
 
-1. **False premise**: @ts-rest is actively maintained (v3.52.1 released March 2025)
-2. **Fastify blocker**: oRPC lacks dedicated Fastify support
-3. **High migration cost**: 4-7 weeks of development for marginal benefit
-4. **Working solution**: Current implementation is stable and well-tested
-5. **Risk/reward**: High risk, low reward
+### Immediate Actions (Next 2-4 weeks)
 
-### Alternative Actions (Instead of Migration)
+1. **Create a GitHub issue** to track oRPC Fastify adapter development
+2. **Pin @ts-rest version** to prevent unexpected breaking changes
+3. **Audit current @ts-rest features** used - document exactly what needs to work
 
-1. **Monitor oRPC**: Revisit when Fastify adapter is available
-2. **Contribute to @ts-rest**: If features are missing, consider PRs
-3. **Document current patterns**: Improve ts-rest.md guide
-4. **Stay updated**: Keep @ts-rest at latest version
+### Short-term (1-3 months)
 
-### If Migration Becomes Necessary Later
+4. **Build a minimal PoC** with oRPC + custom Fastify handler for 2-3 endpoints
+5. **Monitor oRPC releases** for official Fastify adapter
+6. **Evaluate alternative: tRPC** as backup option (has Fastify adapter)
 
-Triggers that would justify reconsidering:
-- @ts-rest becomes truly unmaintained (no releases for 12+ months)
+### Migration Trigger Conditions
+
+Begin full migration when ANY of these occur:
 - oRPC releases official Fastify adapter
-- Critical security vulnerability in @ts-rest
-- Requirement for multi-validator support
+- Security vulnerability discovered in @ts-rest
+- @ts-rest reaches 12+ months of inactivity
+- Critical dependency (Zod 4, Fastify 6) requires @ts-rest update that won't come
+
+### Alternative Consideration: tRPC
+
+If oRPC Fastify support doesn't materialize, consider **tRPC**:
+- Has Fastify adapter (`@trpc/server/adapters/fastify`)
+- More mature than oRPC
+- Active development
+- Similar contract-first approach
+- Drawback: Less OpenAPI-focused
+
+---
+
+## 6. Summary
+
+| Aspect | @ts-rest | oRPC | tRPC (backup) |
+|--------|----------|------|---------------|
+| Maintenance | ❌ Inactive 8mo | ✅ Active | ✅ Active |
+| Fastify Support | ✅ Native | ❌ None | ✅ Native |
+| Migration Effort | N/A | HIGH | MEDIUM |
+| OpenAPI | ✅ Via metadata | ✅ Built-in | ⚠️ Via plugin |
+| Recommendation | Short-term only | Monitor | Backup plan |
 
 ---
 
@@ -170,10 +198,9 @@ Triggers that would justify reconsidering:
 
 ### @ts-rest Repository Activity
 
-- Latest release: **v3.52.1** (March 4, 2025)
-- Latest commit: January 31, 2025
+- **Last commit: June 2, 2025** (~8 months ago)
+- Last release: v3.52.1
 - Open issues: 105
-- Total releases: 194
 - Source: [https://github.com/ts-rest/ts-rest](https://github.com/ts-rest/ts-rest)
 
 ### oRPC Documentation
@@ -187,3 +214,4 @@ Triggers that would justify reconsidering:
 
 *Report generated: January 29, 2026*
 *Evaluation performed by: Claude Code Agent*
+*Corrected: Initial analysis incorrectly stated @ts-rest was active*

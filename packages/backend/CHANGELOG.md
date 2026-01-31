@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.24](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-backend-v0.1.23...diff-voyager-backend-v0.1.24) (2026-01-31)
+
+
+### Bug Fixes
+
+* **deps:** downgrade Fastify to v4 for @ts-rest/fastify compatibility ([158dc0c](https://github.com/gander-tools/diff-voyager/commit/158dc0ceb739f0ca8e5780c8bfcde57e759a590f))
+* **tests:** increase timeout for large image visual comparator tests ([8b422c7](https://github.com/gander-tools/diff-voyager/commit/8b422c7f697e862681110931ad0f6c89b3fc7868))
+
 ## [0.1.23](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-backend-v0.1.22...diff-voyager-backend-v0.1.23) (2026-01-26)
 
 

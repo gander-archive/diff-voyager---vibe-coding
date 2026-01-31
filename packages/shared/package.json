@@ -1,6 +1,6 @@
 {
 	"name": "@gander-tools/diff-voyager-shared",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"type": "module",
 	"description": "Shared TypeScript types and utilities for Diff Voyager",
 	"main": "dist/index.js",

@@ -131,6 +131,12 @@ This command uses [Heroshot](https://heroshot.sh/) to automatically capture all 
   - Visual diff threshold
   - HAR collection status
 
+**Screenshot generation**:
+- Dynamically created by completing project creation wizard
+- Fills all 3 form steps (Basic Info, Crawl Settings, Run Profile)
+- Clicks "Submit" and follows automatic navigation to project detail page
+- No hardcoded UUIDs - uses real user flow
+
 **Phase**: Phase 2 Complete ✅
 
 ---
@@ -140,10 +146,23 @@ This command uses [Heroshot](https://heroshot.sh/) to automatically capture all 
 ![Run Create](05-run-create.png)
 
 **Features shown**:
-- Run creation form (placeholder)
-- Planned for Phase 3
+- Page header with project name and Cancel button
+- Run creation form with fields:
+  - URL input (pre-filled from project)
+  - Viewport preset selector (Desktop, Laptop, Tablet, Mobile)
+  - Custom viewport dimensions (width × height)
+  - Collect HAR files toggle
+  - Wait after load timing (ms)
+- Submit and Cancel buttons
+- Loading state support
 
-**Phase**: Phase 3 Planned ⏳
+**Screenshot generation**:
+- Creates project through wizard (same as 04)
+- Clicks "New Run" button in project detail
+- Follows automatic navigation to run creation form
+- Shows form ready to create comparison run
+
+**Phase**: Phase 3 Complete ✅
 
 ---
 
@@ -152,11 +171,28 @@ This command uses [Heroshot](https://heroshot.sh/) to automatically capture all 
 ![Run Detail](06-run-detail.png)
 
 **Features shown**:
-- Run detail view (placeholder)
-- Run status, statistics, and page list
-- Planned for Phase 3
+- Page header with run information
+- Run status badge (New, In Progress, Completed, etc.)
+- Run statistics section:
+  - Total pages
+  - Successful pages
+  - Failed pages
+  - Pages with changes
+- Run configuration details:
+  - Viewport dimensions
+  - HAR collection status
+  - Wait after load timing
+- Action buttons (Retry, Delete)
+- Pages list with diff indicators
 
-**Phase**: Phase 3 Planned ⏳
+**Screenshot generation**:
+- Creates project through wizard (same as 04)
+- Clicks "New Run" button
+- Submits run creation form with default values
+- Follows automatic navigation to run detail page
+- Shows run ready for execution (or in progress/completed state)
+
+**Phase**: Phase 3 Complete ✅
 
 ---
 

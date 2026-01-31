@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.1.22](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-frontend-v0.1.21...diff-voyager-frontend-v0.1.22) (2026-01-31)
+
+
+### Bug Fixes
+
+* **frontend:** add [@ts-expect-error](https://github.com/ts-expect-error) for i18n runtime vs TypeScript mismatch ([75cb1b1](https://github.com/gander-tools/diff-voyager/commit/75cb1b110da803a8df9b5ed40d062e8f09a3946c))
+* **frontend:** add missing enum imports and fix type assertions in API services ([9eaf354](https://github.com/gander-tools/diff-voyager/commit/9eaf3549b5ad3059753feee508912bb5e77d044f))
+* **frontend:** add type cast for HTMLInputElement in RulesListView tests ([0702a7d](https://github.com/gander-tools/diff-voyager/commit/0702a7d823042501f8211a6259cc3b162757dc8e))
+* **frontend:** correct DiffSummary test expectation for empty changesByType ([f52fc32](https://github.com/gander-tools/diff-voyager/commit/f52fc320e8383563b8193eb95a8bb2aa307eec01))
+* **frontend:** correct test expectations for RunProgress component ([b384f7f](https://github.com/gander-tools/diff-voyager/commit/b384f7f0d3ebd7eb18e3f521da23aa2b918a23eb))
+* **frontend:** expose computed properties for testing in RunProgress ([18b23df](https://github.com/gander-tools/diff-voyager/commit/18b23df095de1941772aa5f198ba10007e678287))
+* **frontend:** fix DiffSummary structure and add null checks in component tests ([19558ea](https://github.com/gander-tools/diff-voyager/commit/19558ea0804fe9c2d03640042359238e55a3ce5c))
+* **frontend:** replace string literals with enum values in components ([b3e95aa](https://github.com/gander-tools/diff-voyager/commit/b3e95aaf484f326bfb4bcc6f5fcbc4c61afedb72))
+* **frontend:** replace string literals with enums in rule tests ([f3d2a50](https://github.com/gander-tools/diff-voyager/commit/f3d2a50e28aa6e5dd24396dae9dd7e80ca21b134))
+* **frontend:** use native enums in Zod validators for type safety ([01cb9f2](https://github.com/gander-tools/diff-voyager/commit/01cb9f2857003cf97911e7498944f278e0c6a651))
+
 ## [0.1.21](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-frontend-v0.1.20...diff-voyager-frontend-v0.1.21) (2026-01-26)
 
 

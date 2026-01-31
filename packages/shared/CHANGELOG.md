@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.11](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-shared-v0.1.10...diff-voyager-shared-v0.1.11) (2026-01-31)
+
+
+### Bug Fixes
+
+* **shared:** prevent XSS by restricting URL schemes to HTTP/HTTPS ([96e05ec](https://github.com/gander-tools/diff-voyager/commit/96e05ec47e28cf2ecd29a5229b3a9c0b5f6cc3a2))
+
 ## [0.1.10](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-shared-v0.1.9...diff-voyager-shared-v0.1.10) (2026-01-14)
 
 

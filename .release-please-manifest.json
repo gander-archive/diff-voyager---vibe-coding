@@ -1,5 +1,5 @@
 {
-	"packages/shared": "0.1.10",
-	"packages/backend": "0.1.23",
-	"packages/frontend": "0.1.21"
+	"packages/shared": "0.1.11",
+	"packages/backend": "0.1.24",
+	"packages/frontend": "0.1.22"
 }

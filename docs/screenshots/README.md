@@ -1,8 +1,8 @@
 # UI Screenshots Index
 
-**Last Generated**: 2026-01-09
+**Last Generated**: 2026-01-31
 **Viewport**: 1024x768
-**Generator**: `scripts/generate-screenshots.ts`
+**Generator**: Heroshot (`.heroshot/config.json`)
 
 ---
 
@@ -12,12 +12,11 @@
 npm run screenshots
 ```
 
-This command:
-1. Starts backend and frontend servers automatically
-2. Creates test project data via API
-3. Captures all 11 views using Playwright
-4. Saves screenshots to this directory
-5. Stops servers when complete
+This command uses [Heroshot](https://heroshot.sh/) to automatically capture all UI views.
+
+**Prerequisites**:
+- Frontend dev server must be running: `npm run dev:frontend`
+- Backend server required for views with data
 
 ---
 
@@ -57,19 +56,55 @@ This command:
 
 ---
 
-### 03. Project Create (`/projects/new`)
+### 03. Project Create - Step 1: Basic Info (`/projects/new`)
 
-![Project Create](03-project-create.png)
+![Project Create Step 1](03-project-create-step1.png)
 
 **Features shown**:
-- Multi-step wizard progress (3 steps)
-- Step 1: Basic Information
-  - Project Name input (required)
-  - Website URL input (required)
-  - Description textarea (optional)
+- Multi-step wizard progress indicator (Step 1 of 3)
+- Basic Information form:
+  - Website URL input (required) - filled with `https://example.com`
+  - Project Name input (required) - filled with `My Website Upgrade`
+  - Description textarea (optional) - filled with example text
 - Real-time validation with error messages
-- Back/Cancel and Next buttons
+- Next button to proceed to Step 2
 - Form validation with vee-validate + Zod
+
+**Phase**: Phase 2 Complete ✅
+
+---
+
+### 03. Project Create - Step 2: Crawl Settings (`/projects/new`)
+
+![Project Create Step 2](03-project-create-step2.png)
+
+**Features shown**:
+- Multi-step wizard progress indicator (Step 2 of 3)
+- Crawl Settings form:
+  - Enable Crawling toggle switch (enabled)
+  - Max Pages input - set to `50`
+  - Helpful hints for each field
+- Back and Next buttons for navigation
+- Step navigation working with form state preservation
+
+**Phase**: Phase 2 Complete ✅
+
+---
+
+### 03. Project Create - Step 3: Run Profile (`/projects/new`)
+
+![Project Create Step 3](03-project-create-step3.png)
+
+**Features shown**:
+- Multi-step wizard progress indicator (Step 3 of 3)
+- Run Profile configuration:
+  - Viewport size preset selector
+  - Custom viewport dimensions (width × height)
+  - Collect HAR files toggle
+  - Wait after load timing
+  - Visual diff threshold slider
+- Back button and Create Project button
+- Final step before project creation
 
 **Phase**: Phase 2 Complete ✅
 
@@ -196,29 +231,58 @@ This command:
 
 ## Technical Details
 
-### Generator Script
+### Heroshot Configuration
 
-**Location**: `scripts/generate-screenshots.ts`
+**Location**: `.heroshot/config.json`
 
-**Dependencies**:
-- `playwright` - Browser automation
-- `tsx` - TypeScript execution
-- Backend API (auto-started)
-- Frontend dev server (auto-started)
+**Tool**: [Heroshot](https://heroshot.sh/) - Config-based screenshot generation for web applications
 
 **Configuration**:
 - **Viewport**: 1024x768
-- **Wait after load**: 500ms (for Vue hydration)
-- **Test data**: Creates project via `POST /api/v1/scans`
-- **Headless**: Yes (no browser window)
+- **Output Directory**: `docs/screenshots/`
+- **Format**: PNG (lossless)
+- **Total Screenshots**: 13 (including 3 wizard steps)
+
+**Key Features**:
+- Automated browser interactions via Actions API
+- Multi-step form navigation with `click`, `type`, and `wait` actions
+- Config-based approach (no code changes needed)
+- Consistent screenshot naming convention
+
+### Actions Used
+
+**Form Interactions**:
+- `type` - Fill form fields with text
+- `click` - Click buttons, toggles, navigation
+- `wait` - Allow Vue hydration and transitions
+
+**Example Configuration** (Project Create Step 2):
+```json
+{
+  "name": "03-project-create-step2",
+  "url": "http://localhost:5173/projects/new",
+  "actions": [
+    {"type": "wait", "time": 1},
+    {"type": "type", "selector": "[data-test=\"url-input\"] input", "text": "https://example.com"},
+    {"type": "type", "selector": "[data-test=\"name-input\"] input", "text": "My Website Upgrade"},
+    {"type": "wait", "time": 0.3},
+    {"type": "click", "selector": "[data-test=\"next-step-btn\"]"},
+    {"type": "wait", "time": 0.5},
+    {"type": "click", "selector": ".n-switch"},
+    {"type": "type", "selector": ".n-input-number input", "text": "50"}
+  ]
+}
+```
 
 ### File Naming Convention
 
 Format: `{number}-{route-name}.png`
 
-- **Number**: 01-11 (maintains order)
+- **Number**: 01-11 (maintains order in documentation)
 - **Route name**: Descriptive kebab-case
-- **Extension**: .png (lossless)
+- **Extension**: .png (lossless compression)
+
+**Multi-step forms**: Use `-step{n}` suffix (e.g., `03-project-create-step1.png`)
 
 ### Version Control
 
@@ -240,20 +304,74 @@ Screenshots are used in:
 
 ## Maintenance
 
-**When to regenerate**:
+### When to Regenerate
+
 - After UI changes (new components, layout updates)
 - After Phase completion (new views implemented)
 - Before creating pull requests with frontend changes
 - When documentation screenshots are outdated
 
-**Verification**:
-1. Run `npm run screenshots`
-2. Check `docs/screenshots/` for updated files
-3. Verify timestamps (should be recent)
-4. Review screenshots visually for correctness
+### Regeneration Steps
 
-**Troubleshooting**:
-- Ensure ports 3000 and 5173 are free
-- Check Playwright installation: `npx playwright install`
-- Verify backend builds: `npm run build:backend`
-- Check frontend runs: `npm run dev:frontend`
+1. **Start frontend dev server**:
+   ```bash
+   npm run dev:frontend
+   ```
+
+2. **Generate screenshots**:
+   ```bash
+   npm run screenshots
+   ```
+
+3. **Verify output**:
+   ```bash
+   ls -lh docs/screenshots/*.png
+   ```
+
+4. **Review visually**:
+   - Open each screenshot to verify correctness
+   - Check that form data is filled properly
+   - Verify step navigation in multi-step wizard
+
+### Adding New Screenshots
+
+1. **Edit configuration**: `.heroshot/config.json`
+2. **Add new screenshot object**:
+   ```json
+   {
+     "name": "12-new-view",
+     "url": "http://localhost:5173/new-view",
+     "actions": [
+       {"type": "wait", "time": 0.5}
+     ]
+   }
+   ```
+3. **Run generation**: `npm run screenshots`
+4. **Update this README** with new screenshot entry
+
+### Troubleshooting
+
+**Issue**: Screenshots missing or incomplete
+- **Solution**: Ensure frontend dev server is running on port 5173
+
+**Issue**: Form fields not filled correctly
+- **Solution**: Check selector accuracy in `.heroshot/config.json`
+- Use browser DevTools to verify CSS selectors
+- Test selectors with `document.querySelector('[data-test="..."]')`
+
+**Issue**: Multi-step wizard navigation fails
+- **Solution**: Increase wait times between `click` and `wait` actions
+- Verify button selectors (`[data-test="next-step-btn"]`)
+- Check if form validation is blocking navigation
+
+**Issue**: Heroshot command not found
+- **Solution**: Ensure heroshot is installed: `npm install --save-dev heroshot@^0.11.0`
+
+---
+
+## Heroshot Resources
+
+- **Documentation**: https://heroshot.sh/docs/
+- **GitHub Repository**: https://github.com/omachala/heroshot
+- **Actions Reference**: https://heroshot.sh/docs/actions-reference
+- **Config Reference**: https://heroshot.sh/docs/config-reference

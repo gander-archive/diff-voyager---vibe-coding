@@ -1,0 +1,246 @@
+{
+  "outputDirectory": "docs/screenshots",
+  "browser": {
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "colorScheme": "light"
+  },
+  "screenshots": [
+    {
+      "name": "01-dashboard",
+      "url": "http://localhost:5173/",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.5
+        }
+      ]
+    },
+    {
+      "name": "02-projects-list",
+      "url": "http://localhost:5173/projects",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.5
+        }
+      ]
+    },
+    {
+      "name": "03-project-create-step1",
+      "url": "http://localhost:5173/projects/new",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 1
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"url-input\"] input",
+          "text": "https://example.com"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"name-input\"] input",
+          "text": "My Website Upgrade"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "type",
+          "selector": "textarea",
+          "text": "Testing framework upgrade from v4 to v5"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        }
+      ]
+    },
+    {
+      "name": "03-project-create-step2",
+      "url": "http://localhost:5173/projects/new",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 1
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"url-input\"] input",
+          "text": "https://example.com"
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"name-input\"] input",
+          "text": "My Website Upgrade"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"next-step-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        },
+        {
+          "type": "click",
+          "selector": ".n-switch"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "click",
+          "selector": ".n-input-number input"
+        },
+        {
+          "type": "wait",
+          "time": 0.2
+        },
+        {
+          "type": "type",
+          "selector": ".n-input-number input",
+          "text": "50"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        }
+      ]
+    },
+    {
+      "name": "03-project-create-step3",
+      "url": "http://localhost:5173/projects/new",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 1
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"url-input\"] input",
+          "text": "https://example.com"
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"name-input\"] input",
+          "text": "My Website Upgrade"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"next-step-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"next-step-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 0.8
+        }
+      ]
+    },
+    {
+      "name": "04-project-detail",
+      "url": "http://localhost:5173/projects/550e8400-e29b-41d4-a716-446655440000",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.8
+        }
+      ]
+    },
+    {
+      "name": "05-run-create",
+      "url": "http://localhost:5173/projects/550e8400-e29b-41d4-a716-446655440000/runs/new",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.8
+        }
+      ]
+    },
+    {
+      "name": "06-run-detail",
+      "url": "http://localhost:5173/runs/660e8400-e29b-41d4-a716-446655440000",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.8
+        }
+      ]
+    },
+    {
+      "name": "07-page-detail",
+      "url": "http://localhost:5173/pages/770e8400-e29b-41d4-a716-446655440000",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.8
+        }
+      ]
+    },
+    {
+      "name": "08-rules-list",
+      "url": "http://localhost:5173/rules",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.5
+        }
+      ]
+    },
+    {
+      "name": "09-rule-create",
+      "url": "http://localhost:5173/rules/new",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.5
+        }
+      ]
+    },
+    {
+      "name": "10-settings",
+      "url": "http://localhost:5173/settings",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.5
+        }
+      ]
+    },
+    {
+      "name": "11-not-found",
+      "url": "http://localhost:5173/this-route-does-not-exist",
+      "actions": [
+        {
+          "type": "wait",
+          "time": 0.5
+        }
+      ]
+    }
+  ]
+}

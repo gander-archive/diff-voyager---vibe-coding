@@ -122,9 +122,9 @@ See `packages/frontend/src/components/ProjectForm.vue` for a complete multi-step
 
 ## Screenshot Updates
 
-**Status**: ✅ Automated screenshot generation available
+**Status**: ✅ Automated screenshot generation with Heroshot
 
-Diff Voyager automatically generates documentation screenshots for all UI views.
+Diff Voyager uses [Heroshot](https://heroshot.sh/) for automated screenshot generation of all UI views.
 
 ### When to Update Screenshots
 
@@ -136,24 +136,28 @@ Diff Voyager automatically generates documentation screenshots for all UI views.
 ### How to Update
 
 ```bash
-# Ensure backend is not running (script will start it automatically)
+# Ensure frontend dev server is running
+npm run dev:frontend
+
+# In another terminal, generate screenshots
 npm run screenshots
 ```
 
 ### What Happens
 
-1. Script starts backend server automatically
-2. Script starts frontend dev server
-3. Creates test project via API
-4. Captures 11 screenshots (1024x768) using Playwright
+1. Heroshot reads configuration from `.heroshot/config.json`
+2. Navigates to each configured URL
+3. Executes automated actions (form filling, navigation)
+4. Captures 13 screenshots (1024x768) as PNG
 5. Saves to `docs/screenshots/*.png`
-6. Stops both servers
 
 ### Screenshot Files
 
 - `01-dashboard.png` - Main dashboard
 - `02-projects-list.png` - Project list with pagination
-- `03-project-create.png` - Multi-step project creation
+- `03-project-create-step1.png` - Project wizard: Basic Info
+- `03-project-create-step2.png` - Project wizard: Crawl Settings
+- `03-project-create-step3.png` - Project wizard: Run Profile
 - `04-project-detail.png` - Project detail view
 - `05-run-create.png` - Run creation form
 - `06-run-detail.png` - Run detail and results
@@ -163,18 +167,27 @@ npm run screenshots
 - `10-settings.png` - Application settings
 - `11-not-found.png` - 404 page
 
+### Key Features
+
+- **Config-based**: Add new screenshots by editing `.heroshot/config.json` (no code changes)
+- **Multi-step forms**: Automated navigation through wizard steps with form filling
+- **Actions API**: Supports `click`, `type`, `wait`, and other browser interactions
+- **Consistent naming**: Follows predictable `{number}-{route-name}.png` pattern
+
 ### Important Notes
 
 - Screenshots are **version controlled** in git (included in commits)
-- Used in documentation: `roadmap.md`, `CLAUDE.md`
-- Viewport: 1024x768 (configurable in script)
+- Used in documentation: `roadmap.md`, `CLAUDE.md`, `docs/screenshots/README.md`
+- Viewport: 1024x768 (configured in `.heroshot/config.json`)
+- Configuration: `.heroshot/config.json`
 - See `docs/screenshots/README.md` for complete index
 
 ### Troubleshooting
 
-- If script fails, ensure no servers are running on ports 3000 or 5173
-- Check Playwright installation: `npx playwright install`
-- Backend must be buildable: `npm run build:backend`
+- **Frontend not running**: Start with `npm run dev:frontend` on port 5173
+- **Heroshot not found**: Install with `npm install --save-dev heroshot@^0.11.0`
+- **Form interactions fail**: Verify selectors in `.heroshot/config.json` with DevTools
+- **Incomplete screenshots**: Increase wait times in action sequences
 
 ## Common UI Component Patterns
 

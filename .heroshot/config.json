@@ -164,31 +164,208 @@
     },
     {
       "name": "04-project-detail",
-      "url": "http://localhost:5173/projects/550e8400-e29b-41d4-a716-446655440000",
+      "url": "http://localhost:5173/projects/new",
       "actions": [
         {
           "type": "wait",
-          "time": 0.8
+          "time": 1
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"url-input\"] input",
+          "text": "https://example.com"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"name-input\"] input",
+          "text": "My Website Upgrade"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "type",
+          "selector": "textarea",
+          "text": "Testing framework upgrade from v4 to v5"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"next-step-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"next-step-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"submit-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 1.5
         }
       ]
     },
     {
       "name": "05-run-create",
-      "url": "http://localhost:5173/projects/550e8400-e29b-41d4-a716-446655440000/runs/new",
+      "url": "http://localhost:5173/projects/new",
       "actions": [
         {
           "type": "wait",
-          "time": 0.8
+          "time": 1
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"url-input\"] input",
+          "text": "https://example.com"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"name-input\"] input",
+          "text": "My Website Upgrade"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "type",
+          "selector": "textarea",
+          "text": "Testing framework upgrade from v4 to v5"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"next-step-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"next-step-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"submit-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 1.5
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"create-run-button\"]"
+        },
+        {
+          "type": "wait",
+          "time": 1
         }
       ]
     },
     {
       "name": "06-run-detail",
-      "url": "http://localhost:5173/runs/660e8400-e29b-41d4-a716-446655440000",
+      "url": "http://localhost:5173/projects/new",
       "actions": [
         {
           "type": "wait",
-          "time": 0.8
+          "time": 1
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"url-input\"] input",
+          "text": "https://example.com"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "type",
+          "selector": "[data-test=\"name-input\"] input",
+          "text": "My Website Upgrade"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "type",
+          "selector": "textarea",
+          "text": "Testing framework upgrade from v4 to v5"
+        },
+        {
+          "type": "wait",
+          "time": 0.3
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"next-step-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"next-step-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 0.5
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"submit-btn\"]"
+        },
+        {
+          "type": "wait",
+          "time": 1.5
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"create-run-button\"]"
+        },
+        {
+          "type": "wait",
+          "time": 1
+        },
+        {
+          "type": "click",
+          "selector": "[data-test=\"submit-button\"]"
+        },
+        {
+          "type": "wait",
+          "time": 2
         }
       ]
     },

@@ -126,8 +126,8 @@ describe('PageCapturer', () => {
     });
   });
 
-  describe('capture - 404 pages', () => {
-    it('should handle 404 pages correctly', async () => {
+  describe('capture - HTTP status codes', () => {
+    it('should capture 404 pages as valid responses', async () => {
       const result = await pageCapturer.capture({
         url: `${baseUrl}/404`,
         pageId: randomUUID(),
@@ -136,10 +136,26 @@ describe('PageCapturer', () => {
         collectHar: false,
       });
 
+      // 404 is a valid HTTP response, not an error
       expect(result.httpStatus).toBe(404);
       expect(result.htmlHash).toBeDefined();
       expect(result.screenshotPath).toBeDefined();
-      expect(result.error).toBeUndefined();
+      expect(result.error).toBeUndefined(); // Not an error
+    });
+
+    it('should differentiate 404 from network errors', async () => {
+      const result = await pageCapturer.capture({
+        url: 'http://invalid-url-that-does-not-exist-12345.com',
+        pageId: randomUUID(),
+        viewport: { width: 1920, height: 1080 },
+        waitAfterLoad: 0,
+        collectHar: false,
+      });
+
+      // Real network error
+      expect(result.httpStatus).toBe(0); // No status received
+      expect(result.error).toBeDefined();
+      expect(result.error).toContain('net::ERR');
     });
   });
 
@@ -447,20 +463,6 @@ describe('PageCapturer', () => {
   });
 
   describe('capture - error handling', () => {
-    it('should handle invalid URLs gracefully', async () => {
-      const result = await pageCapturer.capture({
-        url: 'http://invalid-url-that-does-not-exist-12345.com',
-        pageId: randomUUID(),
-        viewport: { width: 1920, height: 1080 },
-        waitAfterLoad: 0,
-        collectHar: false,
-      });
-
-      expect(result.httpStatus).toBe(0);
-      expect(result.error).toBeDefined();
-      expect(result.error).toContain('net::ERR');
-    });
-
     it('should handle timeout scenarios', async () => {
       // This test verifies that very slow pages eventually timeout
       // The PageCapturer has a 30s timeout configured

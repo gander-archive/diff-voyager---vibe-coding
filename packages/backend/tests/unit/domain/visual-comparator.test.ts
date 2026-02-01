@@ -180,15 +180,37 @@ describe('VisualComparator', () => {
       expect(result.thresholdExceeded).toBe(false);
     });
 
-    it('should handle antialiasing tolerance in pixelmatch', () => {
-      // Small color variations should be ignored with default settings
+    it('should apply threshold configuration correctly', () => {
+      // Create images with measurable difference (10x10 black region = 1% of 100x100)
       const baseline = createTestImage(100, 100, [255, 255, 255, 255]);
-      const slightlyDifferent = createTestImage(100, 100, [254, 254, 254, 255]);
+      const withDifference = createImageWithRegion(
+        100,
+        100,
+        [255, 255, 255, 255],
+        0,
+        0,
+        10,
+        10,
+        [0, 0, 0, 255],
+      );
 
-      const result = VisualComparator.compare(baseline, slightlyDifferent);
+      // With low threshold (strict) - 1% diff should exceed 0.5% threshold
+      const strictResult = VisualComparator.compare(baseline, withDifference, {
+        threshold: 0.5, // 0.5% tolerance
+      });
 
-      // With default pixelmatch threshold, very small differences might be ignored
-      expect(result.diffPercentage).toBeLessThan(100);
+      // With high threshold (permissive) - 1% diff should not exceed 2% threshold
+      const permissiveResult = VisualComparator.compare(baseline, withDifference, {
+        threshold: 2, // 2% tolerance
+      });
+
+      // Verify threshold behavior
+      expect(strictResult.thresholdExceeded).toBe(true);
+      expect(permissiveResult.thresholdExceeded).toBe(false);
+
+      // Both should have same diff percentage (1%)
+      expect(strictResult.diffPercentage).toBe(permissiveResult.diffPercentage);
+      expect(strictResult.diffPercentage).toBe(1);
     });
   });
 

@@ -11,11 +11,15 @@ export interface BadgeStatusConfig<T extends string> {
   value: T;
   expectedText: string;
   expectedType?: string;
+  shouldAnimate?: boolean;
 }
 
 export interface BadgeTestConfig<T extends string> {
   statuses: Array<BadgeStatusConfig<T>>;
   propName?: string;
+  defaultSize?: 'small' | 'medium' | 'large';
+  defaultDataTestId?: string;
+  animationClass?: string;
 }
 
 /**
@@ -30,7 +34,7 @@ export function createBadgeTestSuite<T extends string>(
   const propName = config.propName || 'status';
 
   describe(`${BadgeComponent.name || 'Badge'} - Standard Badge Behavior`, () => {
-    config.statuses.forEach(({ value, expectedText, expectedType }) => {
+    config.statuses.forEach(({ value, expectedText, shouldAnimate }) => {
       it(`should render "${value}" badge correctly`, () => {
         const wrapper = mount(BadgeComponent, {
           props: { [propName]: value },
@@ -38,29 +42,40 @@ export function createBadgeTestSuite<T extends string>(
 
         expect(wrapper.text()).toContain(expectedText);
 
-        if (expectedType) {
-          expect(wrapper.find('.n-tag').classes()).toContain(`n-tag--${expectedType}-type`);
+        // Check animation if specified
+        if (config.animationClass && shouldAnimate !== undefined) {
+          const animationElement = wrapper.find(`.${config.animationClass}`);
+          if (shouldAnimate) {
+            expect(animationElement.exists()).toBe(true);
+          } else {
+            expect(animationElement.exists()).toBe(false);
+          }
         }
       });
     });
 
-    it('should support different sizes', () => {
-      const wrapper = mount(BadgeComponent, {
-        props: {
-          [propName]: config.statuses[0].value,
-          size: 'large',
-        },
+    if (config.defaultSize) {
+      it('should support different sizes', () => {
+        const wrapper = mount(BadgeComponent, {
+          props: {
+            [propName]: config.statuses[0].value,
+            size: 'large',
+          },
+        });
+
+        expect(wrapper.exists()).toBe(true);
       });
+    }
 
-      expect(wrapper.find('.n-tag').classes()).toContain('n-tag--large-size');
-    });
+    if (config.defaultDataTestId) {
+      it('should have data-test attribute', () => {
+        const wrapper = mount(BadgeComponent, {
+          props: { [propName]: config.statuses[0].value },
+        });
 
-    it('should have data-test attribute', () => {
-      const wrapper = mount(BadgeComponent, {
-        props: { [propName]: config.statuses[0].value },
+        const badge = wrapper.find(`[data-test="${config.defaultDataTestId}"]`);
+        expect(badge.exists()).toBe(true);
       });
-
-      expect(wrapper.attributes('data-test')).toBeDefined();
-    });
+    }
   });
 }

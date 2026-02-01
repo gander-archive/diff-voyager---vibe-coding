@@ -3,8 +3,8 @@
  * Tests for keyboard navigation, focus management, and screen reader support
  */
 
-import { mount } from '@vue/test-utils';
 import type { ComponentMountingOptions } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Component } from 'vue';

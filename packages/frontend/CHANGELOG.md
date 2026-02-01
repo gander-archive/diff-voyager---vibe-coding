@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.23](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-frontend-v0.1.22...diff-voyager-frontend-v0.1.23) (2026-02-01)
+
+
+### Bug Fixes
+
+* **tests:** replace explicit 'any' types with proper TypeScript types ([6ef3ca4](https://github.com/gander-tools/diff-voyager/commit/6ef3ca4e697451a7ccceba9c2ffd74e744e6ce85))
+
 ## [0.1.22](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-frontend-v0.1.21...diff-voyager-frontend-v0.1.22) (2026-01-31)
 
 

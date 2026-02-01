@@ -240,11 +240,11 @@ describe('Storage Concurrency', () => {
         isBaseline: false,
       });
 
-      const statuses = ['processing', 'completed', 'failed', 'processing', 'completed'];
+      const statuses = ['in_progress', 'completed', 'interrupted', 'in_progress', 'completed'];
       const updatePromises = statuses.map((status) =>
         Promise.resolve(
           runRepo.update(run.id, {
-            status: status as any,
+            status: status as 'new' | 'in_progress' | 'interrupted' | 'completed',
           }),
         ),
       );
@@ -253,7 +253,7 @@ describe('Storage Concurrency', () => {
 
       const updated = runRepo.findById(run.id);
       expect(updated).not.toBeNull();
-      expect(['processing', 'completed', 'failed']).toContain(updated?.status);
+      expect(['new', 'in_progress', 'interrupted', 'completed']).toContain(updated?.status);
     });
 
     // FIXME: Test needs refactoring for Drizzle async methods and transaction API

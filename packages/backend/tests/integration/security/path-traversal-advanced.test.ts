@@ -304,6 +304,7 @@ describe('Advanced Path Traversal Security', () => {
       const originalExists = existsSync;
 
       try {
+        // biome-ignore lint/suspicious/noExplicitAny: Necessary for monkey-patching global in tests
         (global as any).existsSync = (path: string) => {
           accessLog.push(path);
           return originalExists(path);
@@ -317,6 +318,7 @@ describe('Advanced Path Traversal Security', () => {
         const accessedPaths = accessLog.map((p) => resolve(p));
         expect(accessedPaths.every((p) => p.startsWith(artifactsDir))).toBe(true);
       } finally {
+        // biome-ignore lint/suspicious/noExplicitAny: Necessary for restoring global in tests
         (global as any).existsSync = originalExists;
       }
     });

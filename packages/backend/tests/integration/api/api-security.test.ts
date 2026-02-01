@@ -106,6 +106,82 @@ describe('API Security', () => {
       const body = JSON.parse(response.body);
       expect(body).toHaveProperty('bodyErrors');
     });
+
+    it('should sanitize XSS attempts in project name', async () => {
+      const response = await app.inject({
+        method: 'POST',
+        url: '/api/v1/scans',
+        payload: {
+          url: `${baseUrl}/test-page`,
+          name: '<script>alert("XSS")</script>',
+          sync: false,
+        },
+      });
+
+      // Should either reject (400) or sanitize the input
+      expect([200, 202, 400]).toContain(response.statusCode);
+
+      // If accepted, verify the script tag is not stored verbatim
+      if (response.statusCode === 202 || response.statusCode === 200) {
+        const body = JSON.parse(response.body);
+        // Name should not contain script tags
+        expect(JSON.stringify(body)).not.toContain('<script>');
+      }
+    });
+
+    it('should sanitize XSS attempts in project description', async () => {
+      const response = await app.inject({
+        method: 'POST',
+        url: '/api/v1/scans',
+        payload: {
+          url: `${baseUrl}/test-page`,
+          description: '<img src=x onerror="alert(1)">',
+          sync: false,
+        },
+      });
+
+      // Should either reject (400) or sanitize the input
+      expect([200, 202, 400]).toContain(response.statusCode);
+
+      // If accepted, verify the malicious markup is not stored
+      if (response.statusCode === 202 || response.statusCode === 200) {
+        const body = JSON.parse(response.body);
+        expect(JSON.stringify(body)).not.toContain('onerror=');
+      }
+    });
+  });
+
+  describe('Command Injection Prevention', () => {
+    it('should prevent command injection via URL parameter', async () => {
+      const response = await app.inject({
+        method: 'POST',
+        url: '/api/v1/scans',
+        payload: {
+          url: 'http://example.com; ls -la',
+          sync: false,
+        },
+      });
+
+      // Should reject malicious URL
+      expect(response.statusCode).toBe(400);
+      const body = JSON.parse(response.body);
+      expect(body).toHaveProperty('bodyErrors');
+    });
+
+    it('should prevent command injection via pipe character', async () => {
+      const response = await app.inject({
+        method: 'POST',
+        url: '/api/v1/scans',
+        payload: {
+          url: 'http://example.com | cat /etc/passwd',
+          sync: false,
+        },
+      });
+
+      expect(response.statusCode).toBe(400);
+      const body = JSON.parse(response.body);
+      expect(body).toHaveProperty('bodyErrors');
+    });
   });
 
   describe('Malformed JSON Handling', () => {

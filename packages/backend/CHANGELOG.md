@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.25](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-backend-v0.1.24...diff-voyager-backend-v0.1.25) (2026-02-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fastify/cors to v11 ([bd763db](https://github.com/gander-tools/diff-voyager/commit/bd763dbe82159f3cbad25d145a9db4e8b5aa1a92))
+* **deps:** update dependency @fastify/swagger to v9 ([50dcbf3](https://github.com/gander-tools/diff-voyager/commit/50dcbf3c06a15a05231a8ed6782b6bc9c3ceed4a))
+* **deps:** update dependency fastify to v5 ([a8ac574](https://github.com/gander-tools/diff-voyager/commit/a8ac57406c8e2bd177206d9adc8c75ce0ce28372))
+
 ## [0.1.24](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-backend-v0.1.23...diff-voyager-backend-v0.1.24) (2026-01-31)
 
 

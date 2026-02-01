@@ -379,10 +379,7 @@ describe('TaskQueue.dequeue()', () => {
     // Enqueue with explicit timestamps to ensure deterministic ordering
     const lowId = taskQueue.enqueue({ type: 'capture-page', payload, priority: 'low' });
     // Set explicit timestamp for low priority task
-    db.prepare('UPDATE tasks SET created_at = ? WHERE id = ?').run(
-      '2026-01-01T10:00:00Z',
-      lowId,
-    );
+    db.prepare('UPDATE tasks SET created_at = ? WHERE id = ?').run('2026-01-01T10:00:00Z', lowId);
 
     const normalId = taskQueue.enqueue({ type: 'capture-page', payload, priority: 'normal' });
     // Set timestamp 1 second later but higher priority
@@ -393,10 +390,7 @@ describe('TaskQueue.dequeue()', () => {
 
     const highId = taskQueue.enqueue({ type: 'capture-page', payload, priority: 'high' });
     // Set timestamp latest but highest priority
-    db.prepare('UPDATE tasks SET created_at = ? WHERE id = ?').run(
-      '2026-01-01T10:00:02Z',
-      highId,
-    );
+    db.prepare('UPDATE tasks SET created_at = ? WHERE id = ?').run('2026-01-01T10:00:02Z', highId);
 
     // Should dequeue high priority first (despite being created last)
     const task1 = taskQueue.dequeue();

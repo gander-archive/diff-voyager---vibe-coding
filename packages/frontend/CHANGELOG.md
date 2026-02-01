@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.24](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-frontend-v0.1.23...diff-voyager-frontend-v0.1.24) (2026-02-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency vue-router to v5 ([02aedcc](https://github.com/gander-tools/diff-voyager/commit/02aedcc8d980cb3f5cb0cfb7087ca6f45146f835))
+
 ## [0.1.23](https://github.com/gander-tools/diff-voyager/compare/diff-voyager-frontend-v0.1.22...diff-voyager-frontend-v0.1.23) (2026-02-01)
 
 

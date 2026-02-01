@@ -16,6 +16,7 @@ import {
 import { ProjectRepository } from '../../../src/storage/repositories/project-repository.js';
 import { RunRepository } from '../../../src/storage/repositories/run-repository.js';
 import { createTestApp } from '../../helpers/test-db.js';
+import { testInvalidUuidRejection } from '../../helpers/uuid-validation.js';
 
 describe('GET /api/v1/projects/:projectId/runs', () => {
   let app: FastifyInstance;
@@ -237,15 +238,6 @@ describe('GET /api/v1/projects/:projectId/runs', () => {
   });
 
   it('should validate UUID format for projectId', async () => {
-    const response = await app.inject({
-      method: 'GET',
-      url: '/api/v1/projects/invalid-uuid/runs',
-    });
-
-    expect(response.statusCode).toBe(400);
-    const body = JSON.parse(response.body);
-    // @ts-rest validation error format may differ from old API
-    // Just verify we got a 400 status for invalid UUID
-    expect(body).toBeDefined();
+    await testInvalidUuidRejection(app, '/api/v1/projects/:projectId/runs', 'projectId');
   });
 });

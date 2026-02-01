@@ -18,6 +18,7 @@ import { ProjectRepository } from '../../../src/storage/repositories/project-rep
 import { RunRepository } from '../../../src/storage/repositories/run-repository.js';
 import { SnapshotRepository } from '../../../src/storage/repositories/snapshot-repository.js';
 import { createTestApp } from '../../helpers/test-db.js';
+import { testInvalidUuidRejection } from '../../helpers/uuid-validation.js';
 
 describe('GET /api/v1/runs/:runId/pages', () => {
   let app: FastifyInstance;
@@ -306,15 +307,6 @@ describe('GET /api/v1/runs/:runId/pages', () => {
   });
 
   it('should validate UUID format for runId', async () => {
-    const response = await app.inject({
-      method: 'GET',
-      url: '/api/v1/runs/invalid-uuid/pages',
-    });
-
-    expect(response.statusCode).toBe(400);
-    const body = JSON.parse(response.body);
-    // @ts-rest returns Zod validation errors in pathParameterErrors
-    expect(body.pathParameterErrors).toBeDefined();
-    expect(body.pathParameterErrors.issues[0].validation).toBe('uuid');
+    await testInvalidUuidRejection(app, '/api/v1/runs/:runId/pages', 'runId');
   });
 });

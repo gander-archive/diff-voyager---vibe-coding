@@ -12,9 +12,9 @@ describe('UUID Validation Helper', () => {
     expect(typeof testInvalidUuidRejection).toBe('function');
   });
 
-  it('should have correct function signature (2 required params, 1 optional)', () => {
-    // Function.length returns number of required parameters
-    expect(testInvalidUuidRejection.length).toBe(2);
+  it('should have correct function signature (3 required params, 1 optional)', () => {
+    // Function.length returns number of required parameters (app, endpoint, paramName)
+    expect(testInvalidUuidRejection.length).toBe(3);
   });
 
   it('should be importable from helpers directory', () => {

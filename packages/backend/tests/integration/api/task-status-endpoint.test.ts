@@ -15,6 +15,7 @@ import {
   type DatabaseInstance,
 } from '../../../src/storage/database.js';
 import { createTestApp } from '../../helpers/test-db.js';
+import { testInvalidUuidRejection } from '../../helpers/uuid-validation.js';
 
 describe('GET /api/v1/tasks/:taskId', () => {
   let app: FastifyInstance;
@@ -181,15 +182,6 @@ describe('GET /api/v1/tasks/:taskId', () => {
   });
 
   it('should validate UUID format for taskId', async () => {
-    const response = await app.inject({
-      method: 'GET',
-      url: '/api/v1/tasks/invalid-uuid',
-    });
-
-    expect(response.statusCode).toBe(400);
-    const body = JSON.parse(response.body);
-    // @ts-rest validation error format may differ from old API
-    // Just verify we got a 400 status for invalid UUID
-    expect(body).toBeDefined();
+    await testInvalidUuidRejection(app, '/api/v1/tasks/:taskId', 'taskId');
   });
 });

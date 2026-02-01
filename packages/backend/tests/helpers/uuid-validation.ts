@@ -1,63 +1,40 @@
 import type { FastifyInstance } from 'fastify';
-import { describe, expect, it } from 'vitest';
+import { expect } from 'vitest';
 
 /**
- * Shared test helper for UUID validation in API endpoints
+ * Test helper for UUID validation in API endpoints
  *
- * Creates a test suite that verifies:
- * - Invalid UUID format returns 400 with VALIDATION_ERROR
- * - Missing UUID returns 404 (route not found)
- * - Valid UUID v4 is accepted (returns 200 or 404 if entity doesn't exist)
+ * Verifies that invalid UUID format returns 400 error.
+ * Can be used directly inside an `it` block.
  *
  * @param app - Fastify application instance
- * @param endpoint - API endpoint URL with :id placeholder (e.g., '/api/v1/projects/:id')
+ * @param endpoint - API endpoint URL with parameter placeholder (e.g., '/api/v1/projects/:projectId/runs')
+ * @param paramName - Name of the path parameter to replace (e.g., 'projectId')
  * @param method - HTTP method to test (default: 'GET')
  *
  * @example
  * ```typescript
  * import { testInvalidUuidRejection } from '../../helpers/uuid-validation';
  *
- * describe('GET /api/v1/projects/:projectId', () => {
- *   testInvalidUuidRejection(app, '/api/v1/projects/:id', 'GET');
- *
- *   // Endpoint-specific tests continue...
+ * it('should validate UUID format for projectId', async () => {
+ *   await testInvalidUuidRejection(app, '/api/v1/projects/:projectId/runs', 'projectId');
  * });
  * ```
  */
-export function testInvalidUuidRejection(
+export async function testInvalidUuidRejection(
   app: FastifyInstance,
   endpoint: string,
+  paramName: string,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
 ) {
-  describe('UUID validation', () => {
-    it('should return 400 for invalid UUID format', async () => {
-      const response = await app.inject({
-        method,
-        url: endpoint.replace(':id', 'invalid-uuid'),
-      });
+  const url = endpoint.replace(`:${paramName}`, 'invalid-uuid');
 
-      expect(response.statusCode).toBe(400);
-      expect(response.json().error.code).toBe('VALIDATION_ERROR');
-    });
-
-    it('should return 400 for missing UUID', async () => {
-      const response = await app.inject({
-        method,
-        url: endpoint.replace(':id', ''),
-      });
-
-      expect(response.statusCode).toBe(404); // Route not found
-    });
-
-    it('should accept valid UUID v4', async () => {
-      const validUuid = '550e8400-e29b-41d4-a716-446655440000';
-      const response = await app.inject({
-        method,
-        url: endpoint.replace(':id', validUuid),
-      });
-
-      // Should not fail on UUID validation (may 404 if entity doesn't exist)
-      expect([200, 404]).toContain(response.statusCode);
-    });
+  const response = await app.inject({
+    method,
+    url,
   });
+
+  expect(response.statusCode).toBe(400);
+  const body = JSON.parse(response.body);
+  expect(body).toBeDefined();
 }

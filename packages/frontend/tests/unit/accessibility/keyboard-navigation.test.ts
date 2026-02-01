@@ -4,8 +4,10 @@
  */
 
 import { mount } from '@vue/test-utils';
+import type { ComponentMountingOptions } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Component } from 'vue';
 import ProjectCard from '../../../src/components/ProjectCard.vue';
 import ProjectForm from '../../../src/components/ProjectForm.vue';
 import RunCard from '../../../src/components/RunCard.vue';
@@ -53,7 +55,10 @@ describe('Keyboard Navigation Accessibility', () => {
   });
 
   // Helper to mount component
-  const mountComponent = (component: any, options: any = {}) => {
+  const mountComponent = <T extends Component>(
+    component: T,
+    options: ComponentMountingOptions<T> = {},
+  ) => {
     return mount(component, options);
   };
 

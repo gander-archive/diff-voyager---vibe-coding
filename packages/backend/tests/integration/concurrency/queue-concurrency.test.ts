@@ -12,6 +12,10 @@ import { TaskQueue } from '../../../src/queue/task-queue.js';
 import type { CapturePagePayload } from '../../../src/queue/types.js';
 import { closeDatabase, createDatabase } from '../../../src/storage/database.js';
 
+interface CountResult {
+  count: number;
+}
+
 describe('Queue Concurrency', () => {
   let testDir: string;
   let dbPath: string;
@@ -253,10 +257,14 @@ describe('Queue Concurrency', () => {
       await Promise.all(updatePromises);
 
       const completed = (
-        db.prepare('SELECT COUNT(*) as count FROM tasks WHERE status = ?').get('completed') as any
+        db
+          .prepare('SELECT COUNT(*) as count FROM tasks WHERE status = ?')
+          .get('completed') as CountResult
       ).count;
       const failed = (
-        db.prepare('SELECT COUNT(*) as count FROM tasks WHERE status = ?').get('failed') as any
+        db
+          .prepare('SELECT COUNT(*) as count FROM tasks WHERE status = ?')
+          .get('failed') as CountResult
       ).count;
       expect(completed + failed).toBe(10);
     });
@@ -351,10 +359,10 @@ describe('Queue Concurrency', () => {
 
       const pendingTasks = db
         .prepare('SELECT * FROM tasks WHERE status = ?')
-        .all('pending') as any[];
+        .all('pending') as CountResult[];
       const processingTasks = db
         .prepare('SELECT * FROM tasks WHERE status = ?')
-        .all('processing') as any[];
+        .all('processing') as CountResult[];
 
       expect(pendingTasks.length + processingTasks.length).toBe(100);
     });
@@ -405,7 +413,8 @@ describe('Queue Concurrency', () => {
         config: {},
       };
 
-      const initialCount = (db.prepare('SELECT COUNT(*) as count FROM tasks').get() as any).count;
+      const initialCount = (db.prepare('SELECT COUNT(*) as count FROM tasks').get() as CountResult)
+        .count;
 
       try {
         db.transaction(() => {
@@ -417,7 +426,8 @@ describe('Queue Concurrency', () => {
         // Expected error
       }
 
-      const finalCount = (db.prepare('SELECT COUNT(*) as count FROM tasks').get() as any).count;
+      const finalCount = (db.prepare('SELECT COUNT(*) as count FROM tasks').get() as CountResult)
+        .count;
       expect(finalCount).toBe(initialCount);
     });
   });
@@ -507,7 +517,8 @@ describe('Queue Concurrency', () => {
 
       await Promise.all(operations);
 
-      const totalCount = (db.prepare('SELECT COUNT(*) as count FROM tasks').get() as any).count;
+      const totalCount = (db.prepare('SELECT COUNT(*) as count FROM tasks').get() as CountResult)
+        .count;
       expect(totalCount).toBe(50);
     });
 
@@ -532,10 +543,14 @@ describe('Queue Concurrency', () => {
       await Promise.all(updatePromises);
 
       const completedCount = (
-        db.prepare('SELECT COUNT(*) as count FROM tasks WHERE status = ?').get('completed') as any
+        db
+          .prepare('SELECT COUNT(*) as count FROM tasks WHERE status = ?')
+          .get('completed') as CountResult
       ).count;
       const pendingCount = (
-        db.prepare('SELECT COUNT(*) as count FROM tasks WHERE status = ?').get('pending') as any
+        db
+          .prepare('SELECT COUNT(*) as count FROM tasks WHERE status = ?')
+          .get('pending') as CountResult
       ).count;
 
       expect(completedCount).toBe(10);

@@ -505,4 +505,24 @@ describe('Advanced Path Traversal Security', () => {
       expect(invalidResponses.length).toBe(5);
     });
   });
+
+  describe('Additional security edge cases', () => {
+    it('should reject pageId with control characters', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/api/v1/artifacts/page-\x00-123/screenshot',
+      });
+      expect(response.statusCode).toBe(400);
+    });
+
+    it('should reject oversized path segments', async () => {
+      const longPath = 'a'.repeat(5000);
+      const response = await app.inject({
+        method: 'GET',
+        url: `/api/v1/artifacts/${longPath}/screenshot`,
+      });
+      // Oversized paths can be rejected as either 400 (bad request) or 404 (not found)
+      expect([400, 404]).toContain(response.statusCode);
+    });
+  });
 });

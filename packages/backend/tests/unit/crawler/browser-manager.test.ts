@@ -3,7 +3,7 @@
  * Tests browser instance lifecycle, pooling, and error handling
  */
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { BrowserManager } from '../../../src/crawler/browser-manager.js';
 
 describe('BrowserManager', () => {
@@ -37,15 +37,23 @@ describe('BrowserManager', () => {
     });
 
     it('should handle concurrent getBrowser calls safely', async () => {
+      // Create spy to verify browser is launched only once
+      const playwrightModule = await import('playwright');
+      const launchSpy = vi.spyOn(playwrightModule.chromium, 'launch');
+
       const [browser1, browser2, browser3] = await Promise.all([
         browserManager.getBrowser(),
         browserManager.getBrowser(),
         browserManager.getBrowser(),
       ]);
 
+      // Should create browser only once despite concurrent requests
+      expect(launchSpy).toHaveBeenCalledTimes(1);
       expect(browser1).toBe(browser2);
       expect(browser2).toBe(browser3);
       expect(browser1.isConnected()).toBe(true);
+
+      launchSpy.mockRestore();
     });
 
     it('should throw error when manager is closing', async () => {

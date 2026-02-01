@@ -81,11 +81,13 @@ describe('Advanced Path Traversal Security', () => {
         url: '/api/v1/artifacts/../../../etc/passwd/screenshot',
       });
 
+      // Security violation should return 400 (validation error) or 404 (route not found)
+      // Both indicate successful blocking
       expect([400, 404]).toContain(response.statusCode);
 
+      // Verify no sensitive data leaked
       if (response.statusCode === 200) {
-        const body = response.body;
-        expect(body).not.toContain('root:');
+        expect(response.body).not.toContain('root:');
       }
     });
 
@@ -104,6 +106,7 @@ describe('Advanced Path Traversal Security', () => {
         url: '/api/v1/artifacts/%252e%252e%252f%252e%252e%252fetc%252fpasswd/screenshot',
       });
 
+      // Both 400 and 404 indicate successful blocking
       expect([400, 404]).toContain(response.statusCode);
     });
 
@@ -113,6 +116,7 @@ describe('Advanced Path Traversal Security', () => {
         url: '/api/v1/artifacts/\u002e\u002e\u002f\u002e\u002e\u002fetc\u002fpasswd/screenshot',
       });
 
+      // Both 400 and 404 indicate successful blocking
       expect([400, 404]).toContain(response.statusCode);
     });
 
@@ -122,6 +126,7 @@ describe('Advanced Path Traversal Security', () => {
         url: '/api/v1/artifacts/..\\..\\..\\etc\\passwd/screenshot',
       });
 
+      // Both 400 and 404 indicate successful blocking
       expect([400, 404]).toContain(response.statusCode);
     });
   });
